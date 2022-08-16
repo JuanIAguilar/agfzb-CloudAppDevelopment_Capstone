@@ -14,6 +14,7 @@ from ibm_watson.natural_language_understanding_v1 import Features, SentimentOpti
 def get_request(url, **kwargs):
     api_key = kwargs.get("api_key")
     print("GET from {} ".format(url))
+    response = ''
     try:
         # Call get method of requests library with URL and parameters
         if api_key:
@@ -44,18 +45,10 @@ def get_request(url, **kwargs):
 
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
-def post_request(url, json_payload, **kwargs):
+def post_request(url, payload, **kwargs):
     print("POST from {} ".format(url))
-    try:
-        response = request.post(
-            url, 
-            params=kwargs, 
-            headers={'Content-Type': 'application/json'},
-            json=json_payload
-        )
-    except:
-        print("Network exception occurred")
-
+    print("POST from {} ".format(payload))
+    response = requests.post(url, params=kwargs, json=payload)
     status_code = response.status_code
     print("With status {} ".format(status_code))
     json_data = json.loads(response.text)
@@ -90,10 +83,10 @@ def get_dealers_from_cf(url, **kwargs):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
 def get_dealer_by_id_from_cf(url, dealerId):
-    get_dealers_from_cf(url, dealedId=dealerId)
+    return get_dealers_from_cf(url, dealerId=dealerId)
 
 def get_dealer_by_state_from_cf(url, state):
-    get_dealers_from_cf(url, state=state)
+    return get_dealers_from_cf(url, state=state)
 
 def get_dealer_reviews_from_cf(url, **kwargs):
     results = []
@@ -113,7 +106,6 @@ def get_dealer_reviews_from_cf(url, **kwargs):
                 car_model=review_doc["car_model"], 
                 car_year=review_doc["car_year"], 
                 dealership=review_doc["dealership"], 
-                id=review_doc["id"], 
                 name=review_doc["name"], 
                 purchase=review_doc["purchase"], 
                 purchase_date=review_doc["purchase_date"], 
@@ -131,11 +123,11 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 def analyze_review_sentiments(text):
     print(text)
     url = "https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/fa4bef99-d4f5-4256-9981-a64c911729c4" 
-    api_key = ${{secrets.NLU_API_KEY}}
+    api_key = "GGjA4RX8Axt28w2btK2lAcEyVzHGX0oYY6X7I6sDNFQ5"
 
     authenticator = IAMAuthenticator(api_key) 
     natural_language_understanding = NaturalLanguageUnderstandingV1(
-            version='2022-04-07', 
+            version='2021-08-01', 
             authenticator=authenticator
         ) 
     natural_language_understanding.set_service_url(url) 
